@@ -23,6 +23,6 @@ const decrypt = (cipher) => {
   return null
 }
 
-console.log(`crypto test: ${decrypt(encrypt('Hello, world!'))}`)
+console.log(decrypt(encrypt('Testing crypto lib...')))
 
 export default { encrypt, decrypt }
