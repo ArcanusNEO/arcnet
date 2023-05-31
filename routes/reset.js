@@ -8,7 +8,7 @@ import helper from '../utils/helper.js'
 
 router.patch('/password', async (req, res) => {
   try {
-    if (!(await helper.verifyEmailCaptcha(req.body.emailCaptcha)))
+    if (!(await helper.verifyEmailCaptcha(req, res, req.body.emailCaptcha)))
       return res.sendStatus(statusCode.captchaErr)
 
     const { username, password } = req.body
@@ -24,7 +24,7 @@ router.patch('/password', async (req, res) => {
     const pwdQuery = 'UPDATE "user" SET "password" = $1 WHERE "uid" = $2'
     await db.query(pwdQuery, [hpwd, uid])
 
-    return res.status(statusCode.ok).json(await helper.accountCookie(uid, gid, username, nickname))
+    return res.status(statusCode.ok).json(await helper.accountCookie(req, res, { uid, gid, username, nickname }))
   } catch { }
   return res.status(statusCode.forbidden)
 })
@@ -37,7 +37,7 @@ router.patch('/nickname', loginChk, async (req, res) => {
     const query = 'UPDATE "user" SET "nickname" = $1 WHERE "uid" = $2'
     await db.query(query, [nickname, uid])
 
-    return res.status(statusCode.ok).json(await helper.accountCookie(uid, gid, username, nickname))
+    return res.status(statusCode.ok).json(await helper.accountCookie(req, res, { uid, gid, username, nickname }))
   } catch { }
   return res.status(statusCode.forbidden)
 })

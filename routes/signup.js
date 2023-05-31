@@ -7,7 +7,7 @@ import helper from '../utils/helper.js'
 
 router.post('/', async (req, res) => {
   try {
-    if (!(await helper.verifyEmailCaptcha(req.body.emailCaptcha)))
+    if (!(await helper.verifyEmailCaptcha(req, res, req.body.emailCaptcha)))
       return res.sendStatus(statusCode.captchaErr)
 
     const { username, nickname, password } = req.body
@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
     const pwdQuery = 'UPDATE "user" SET "password" = $1 WHERE "uid" = $2'
     await db.query(pwdQuery, [hpwd, uid])
 
-    return res.status(statusCode.ok).json(await helper.accountCookie(uid, gid, username, nickname))
+    return res.status(statusCode.ok).json(await helper.accountCookie(req, res, { uid, gid, username, nickname }))
   } catch { }
   return res.sendStatus(statusCode.forbidden)
 })

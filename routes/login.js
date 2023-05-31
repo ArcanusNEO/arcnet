@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
 
     if (hpwd !== user.password) return res.sendStatus(statusCode.passwdMismatch)
 
-    return res.status(statusCode.ok).json(await helper.accountCookie(uid, gid, username, nickname))
+    return res.status(statusCode.ok).json(await helper.accountCookie(req, res, { uid, gid, username, nickname }))
   } catch { }
   return res.sendStatus(statusCode.forbidden)
 })
