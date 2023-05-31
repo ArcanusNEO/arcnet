@@ -11,9 +11,6 @@ router.post('/', async (req, res) => {
   try {
     const { username, password } = req.body
 
-    const pwd = crypto.decrypt(password)
-    if (!pwd) return res.sendStatus(statusCode.parseErr)
-
     const jwtAccount = await tokenUtils.get(req, 'acc')
     if (jwtAccount && jwtAccount.username === username) {
       const { uid, username, gid, nickname } = jwtAccount
@@ -21,6 +18,9 @@ router.post('/', async (req, res) => {
       return res.status(statusCode.ok).json(account)
     }
     tokenUtils.remove(res, 'acc')
+
+    const pwd = crypto.decrypt(password)
+    if (!pwd) return res.sendStatus(statusCode.parseErr)
 
     const userQuery = 'SELECT "uid", "gid", "nickname", "password" FROM "user" WHERE "email" = $1 AND "status" = 0 LIMIT 1'
     const user = (await db.query(userQuery, [username])).rows[0]
