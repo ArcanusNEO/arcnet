@@ -14,8 +14,8 @@ router.get('/', (req, res) => {
   return res.sendStatus(statusCode.unauthorized)
 })
 
-router.get('/id/:uid(\\d+)', async (req, res) => {
-  const query = 'SELECT * FROM "user" WHERE "uid" = $1 AND "status" = 0'
+router.get('/:uid(\\d+)', async (req, res) => {
+  const query = 'SELECT * FROM "user" WHERE "uid" = $1 AND "status" >= 0'
   const ret = (await db.query(query, [req.params.uid])).rows[0] || {}
   delete ret.password
   return res.status(statusCode.ok).json(ret)
