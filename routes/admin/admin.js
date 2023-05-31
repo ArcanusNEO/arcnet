@@ -1,10 +1,10 @@
 import express from 'express'
 const router = express.Router()
 import statusCode from '../../config/http-status-code.js'
-import loginChk from '../midwares/login-check.js'
+import adminChk from '../midwares/admin-check.js'
 import user from './user.js'
 
-router.use(loginChk)
+router.use(adminChk)
 
 router.use('/u(ser(s)?)?', user)
 

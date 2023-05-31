@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     const ret = await email(req.body.email, `您的邮箱验证码是：\n${captcha}`, "邮箱验证码")
     if (ret) return res.sendStatus(statusCode.ok)
   } catch { }
-  return res.sendStatus(statusCode.internalSrvErr)
+  return res.sendStatus(statusCode.forbidden)
 })
 
 export default router

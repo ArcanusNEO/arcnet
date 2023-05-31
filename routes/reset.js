@@ -6,7 +6,7 @@ import hash from '../utils/hash.js'
 import loginChk from './midwares/login-check.js'
 import helper from '../utils/helper.js'
 
-router.post('/password', async (req, res) => {
+router.patch('/password', async (req, res) => {
   try {
     if (!(await helper.verifyEmailCaptcha(req.body.emailCaptcha)))
       return res.sendStatus(statusCode.captchaErr)
@@ -15,7 +15,7 @@ router.post('/password', async (req, res) => {
     const pwd = crypto.decrypt(password)
     if (!pwd) return res.sendStatus(statusCode.parseErr)
 
-    const userQuery = 'SELECT "uid", "gid", "nickname" FROM "user" WHERE "email" = $1 AND NOT "removed" LIMIT 1'
+    const userQuery = 'SELECT "uid", "gid", "nickname" FROM "user" WHERE "email" = $1 AND "status" = 0 LIMIT 1'
     const user = (await db.query(userQuery, [username])).rows[0]
     if (!user) return res.sendStatus(statusCode.resNotFound)
     const { uid, gid, nickname } = user
@@ -29,7 +29,7 @@ router.post('/password', async (req, res) => {
   return res.status(statusCode.forbidden)
 })
 
-router.post('/nickname', loginChk, async (req, res) => {
+router.patch('/nickname', loginChk, async (req, res) => {
   try {
     const { nickname } = req.body
     const { uid, username, gid } = req.jwtAccount

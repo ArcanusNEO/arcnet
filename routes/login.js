@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
     }
     tokenUtils.remove(res, 'acc')
 
-    const userQuery = 'SELECT "uid", "gid", "nickname", "password" FROM "user" WHERE "email" = $1 AND NOT "removed" LIMIT 1'
+    const userQuery = 'SELECT "uid", "gid", "nickname", "password" FROM "user" WHERE "email" = $1 AND "status" = 0 LIMIT 1'
     const user = (await db.query(userQuery, [username])).rows[0]
     if (!user) return res.sendStatus(statusCode.resNotFound)
 
