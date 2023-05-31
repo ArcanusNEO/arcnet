@@ -1,5 +1,6 @@
 import express from 'express'
 const router = express.Router()
+import db from '../../utils/database.js'
 import statusCode from '../../config/http-status-code.js'
 import reset from './reset.js'
 

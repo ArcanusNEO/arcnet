@@ -1,6 +1,9 @@
 import express from 'express'
 const router = express.Router()
 import statusCode from '../../config/http-status-code.js'
+import db from '../../utils/database.js'
+import crypto from '../../utils/passwd-crypto.js'
+import hash from '../../utils/hash.js'
 
 router.patch('/password', async (req, res) => {
   try {
